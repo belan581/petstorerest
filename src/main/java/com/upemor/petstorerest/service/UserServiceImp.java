@@ -49,9 +49,8 @@ public class UserServiceImp implements UserService {
 		currentUser.setEmail(user.getEmail());
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         currentUser.setPassword(encoder.encode(user.getPassword()));
-		currentUser.setPassword(user.getPassword());
 		currentUser.setStatus(user.isStatus());
-		
+		currentUser.setRole(user.getRole());
 		userRepository.saveAndFlush(currentUser);
 		
 		return currentUser;

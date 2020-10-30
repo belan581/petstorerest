@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.and().authorizeRequests().antMatchers("/api/user/**").authenticated()
 		.antMatchers("/h2-console/**").permitAll()
-		.and().httpBasic().realmName("User Registration System")
+		.and().httpBasic().realmName("Pet Store webapp")
 		.and().csrf().disable();
 	}
 
