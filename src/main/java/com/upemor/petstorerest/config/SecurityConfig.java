@@ -37,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.headers().frameOptions().sameOrigin();
 		http.sessionManagement()
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-		.and().authorizeRequests().antMatchers("/api/user/**").authenticated()
+		.and().authorizeRequests().antMatchers("/api/user/**").permitAll()
 		.antMatchers("/h2-console/**").permitAll()
 		.and().httpBasic().realmName("Pet Store webapp")
 		.and().csrf().disable();

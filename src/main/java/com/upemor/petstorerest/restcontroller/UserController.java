@@ -39,10 +39,10 @@ public class UserController {
 	public ResponseEntity<User> findById(@PathVariable("id") final int id){
 		User user = userService.findById(id);
 		if (user == null) {
-			return new ResponseEntity<User>(
-			new UserErrorException("User with id "
-			+ id + " not found"), HttpStatus.NOT_FOUND);
-			}
+			return new ResponseEntity<User>(new UserErrorException("User with id "
+					+ id + " not found"), HttpStatus.NOT_FOUND);
+			
+		}
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 		
 	}
@@ -51,8 +51,7 @@ public class UserController {
 	public ResponseEntity<User> createUser(@RequestBody final User user) {
 		if(!userService.createUser(user)) {
 			return new ResponseEntity<User>(new UserErrorException(
-					"Unable to create new user. A User with name "
-					+ user.getEmail() + " already exist."),HttpStatus.CONFLICT);
+					"Unable to create new user. A User with email or username already exist."),HttpStatus.CONFLICT);
 		}
 		return new ResponseEntity<User>(user, HttpStatus.CREATED);
 	}

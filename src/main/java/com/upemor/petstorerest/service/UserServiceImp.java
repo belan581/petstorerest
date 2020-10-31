@@ -32,7 +32,7 @@ public class UserServiceImp implements UserService {
 
 	
 	public boolean createUser(User user) {
-		if (userRepository.findByEmail(user.getEmail()) != null) {
+		if (userRepository.findByEmail(user.getEmail()) != null || userRepository.findByUsername(user.getUsername())!=null)  {
 			return false;
 			}
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
