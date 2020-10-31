@@ -27,6 +27,7 @@ public class UserServiceImp implements UserService {
 
 	public User findById(int id) {
 		User user = userRepository.findById(id); 
+		user.setPassword("");
 		return user;
 	}
 
@@ -38,6 +39,7 @@ public class UserServiceImp implements UserService {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         user.setPassword(encoder.encode(user.getPassword()));
 		userRepository.saveAndFlush(user);
+		user.setPassword("");
 		return true;
 	}
 
@@ -52,6 +54,7 @@ public class UserServiceImp implements UserService {
 		currentUser.setStatus(user.isStatus());
 		currentUser.setRole(user.getRole());
 		userRepository.saveAndFlush(currentUser);
+		currentUser.setPassword("");
 		
 		return currentUser;
 	}
