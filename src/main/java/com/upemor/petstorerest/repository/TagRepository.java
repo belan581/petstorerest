@@ -9,4 +9,6 @@ import com.upemor.petstorerest.model.Tag;
 public interface TagRepository extends JpaRepository<Tag, Integer> {
 	
 	Tag findById(int id);
+
+	Tag findByName(String name);
 }

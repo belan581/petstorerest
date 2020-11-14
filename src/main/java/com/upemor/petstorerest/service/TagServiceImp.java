@@ -24,8 +24,12 @@ public class TagServiceImp implements TagService {
 		return tag;
 	}
 
-	public void createTag(Tag tag) {
+	public boolean createTag(Tag tag) {
+		if(tag.equals(tagRepository.findByName(tag.getName()))) {
+			return false;
+		}
 		tagRepository.save(tag);
+		return true;
 	}
 
 	public Tag updateTag(int id, Tag tag) {

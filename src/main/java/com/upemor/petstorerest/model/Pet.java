@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -14,7 +15,7 @@ import javax.persistence.OneToMany;
 public class Pet {
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy= GenerationType.AUTO)
 	private int id;
 	
 	private String name;
@@ -26,7 +27,7 @@ public class Pet {
 	private float price;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "category_id")
+    	@JoinColumn(name = "category_id")
     private Category category;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
@@ -36,7 +37,6 @@ public class Pet {
 	@OneToMany(mappedBy = "pet", cascade = {
 	        CascadeType.ALL
 	    })
-	
 	private List < Orderpet > orders;
 
 	public int getId() {
@@ -79,6 +79,23 @@ public class Pet {
 		this.price = price;
 	}
 
+	
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+	public Tag getTag() {
+		return tag;
+	}
+
+	public void setTag(Tag tag) {
+		this.tag = tag;
+	}
+	
 	public Pet() {
 		// TODO Auto-generated constructor stub
 	}

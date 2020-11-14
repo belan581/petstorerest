@@ -5,16 +5,19 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="Tag")
 public class Tag {
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy= GenerationType.AUTO)
 	private int id;
 	
 	private String name;
@@ -22,8 +25,7 @@ public class Tag {
 	@OneToMany(mappedBy = "tag", cascade = {
 	        CascadeType.ALL
 	    })
-	
-	private List < Pet > pets;
+	private List<Pet> pets;
 
 	public int getId() {
 		return id;

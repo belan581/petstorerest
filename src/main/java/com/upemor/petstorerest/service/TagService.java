@@ -12,7 +12,7 @@ public interface TagService {
 	
 	Tag findById(int id);
 	
-	void createTag(Tag tag);
+	boolean createTag(Tag tag);
 	
 	Tag updateTag(int id, Tag tag);
 	
