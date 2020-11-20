@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,12 +48,20 @@ public class PetController {
 		
 	}
 	
-	@PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Pet> createPet(@RequestBody final Pet pet) {
-		if(!petService.createPet(pet)) {
-			return new ResponseEntity<Pet>(pet,HttpStatus.CONFLICT);
+		Pet findPet = petService.findById(1);
+		try {
+			if(!petService.createPet(pet)) {
+				
+				return new ResponseEntity<Pet>(pet,HttpStatus.CONFLICT);
+			}
+			return new ResponseEntity<Pet>(pet, HttpStatus.CREATED);
 		}
-		return new ResponseEntity<Pet>(pet, HttpStatus.CREATED);
+		catch (Exception e) {
+			return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
 	}
 	
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)

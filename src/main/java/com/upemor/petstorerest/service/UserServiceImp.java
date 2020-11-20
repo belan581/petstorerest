@@ -1,9 +1,13 @@
 package com.upemor.petstorerest.service;
 
 import java.util.List;
+import java.util.Optional;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.upemor.petstorerest.model.User;
@@ -14,6 +18,9 @@ public class UserServiceImp implements UserService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder; //Inyeccion del bean encoder definido en la clase SecutiryConfig
 
 	public User findUserForLogin(String email, String password) {
 		//BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -25,10 +32,8 @@ public class UserServiceImp implements UserService {
 		return userRepository.findAll();
 	}
 
-	public User findById(int id) {
-		User user = userRepository.findById(id); 
-		user.setPassword("");
-		return user;
+	public Optional<User> findById(int id) {
+		return userRepository.findById(id);
 	}
 
 	
@@ -44,13 +49,13 @@ public class UserServiceImp implements UserService {
 	}
 
 	public User updateUser(int id, User user) {
-		User currentUser = userRepository.findById(id);
+		User currentUser = userRepository.findById(id)
+				.orElseThrow(()-> new EntityNotFoundException());
 		currentUser.setUsername(user.getUsername());
 		currentUser.setFirstname(user.getFirstname());
 		currentUser.setLastname(user.getLastname());
 		currentUser.setEmail(user.getEmail());
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        currentUser.setPassword(encoder.encode(user.getPassword()));
+        currentUser.setPassword(passwordEncoder.encode(user.getPassword()));
 		currentUser.setStatus(user.isStatus());
 		currentUser.setRole(user.getRole());
 		userRepository.saveAndFlush(currentUser);

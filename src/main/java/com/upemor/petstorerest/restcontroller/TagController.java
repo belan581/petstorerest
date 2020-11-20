@@ -29,11 +29,17 @@ public class TagController {
 	
 	@GetMapping("/")
 	public ResponseEntity<List<Tag>> listallTags(){
-		List<Tag> tags = tagService.listAllTags();
-		if(tags.isEmpty()) {
-			return new ResponseEntity<List<Tag>>(tags, HttpStatus.NO_CONTENT);
+		try {
+			List<Tag> tags = tagService.listAllTags();
+			if(tags.isEmpty()) {
+				return new ResponseEntity<List<Tag>>(tags, HttpStatus.NO_CONTENT);
+			}
+			return new ResponseEntity<List<Tag>>(tags, HttpStatus.OK);
 		}
-		return new ResponseEntity<List<Tag>>(tags, HttpStatus.OK);
+		catch (Exception e) {
+			return new ResponseEntity<List<Tag>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
 	}
 	
 	@GetMapping("/{id}")

@@ -1,6 +1,7 @@
 package com.upemor.petstorerest.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.upemor.petstorerest.model.User;
 
@@ -10,7 +11,7 @@ public interface UserService {
 	
 	List<User> listAllUsers();
 	
-	User findById(int id);
+	Optional<User> findById(int id);
 	
 	boolean createUser(User user);
 	

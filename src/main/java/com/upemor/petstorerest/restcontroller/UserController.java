@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JacksonInject.Value;
 import com.upemor.petstorerest.exception.UserErrorException;
 import com.upemor.petstorerest.model.User;
 import com.upemor.petstorerest.service.UserService;
@@ -37,13 +38,9 @@ public class UserController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<User> findById(@PathVariable("id") final int id){
-		User user = userService.findById(id);
-		if (user == null) {
-			return new ResponseEntity<User>(new UserErrorException("User with id "
-					+ id + " not found"), HttpStatus.NOT_FOUND);
-			
-		}
-		return new ResponseEntity<User>(user, HttpStatus.OK);
+		return userService.findById(id)
+				.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+				.orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
 		
 	}
 	
@@ -58,7 +55,7 @@ public class UserController {
 	
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<User> updateUser(@PathVariable("id") final int id, @RequestBody User user) {
-		User currentuser = userService.findById(id);
+		User currentuser = userService.findById(id).orElse(null);
 		if (currentuser == null) {
 			return new ResponseEntity<User>(
 					new UserErrorException("Unable to upate. User with id "
@@ -70,7 +67,7 @@ public class UserController {
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<User> deleteUser(@PathVariable("id") final int id) {
-		User currentuser = userService.findById(id);
+		User currentuser = userService.findById(id).orElse(null);
 		if (currentuser == null) {
 			return new ResponseEntity<User>(
 					new UserErrorException("Unable to delete User with id "

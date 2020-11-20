@@ -16,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.upemor.petstorerest.service.UserInfoDetailService;
 
@@ -41,27 +43,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.headers().frameOptions().sameOrigin();
-		http.cors().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-		.and().authorizeRequests()
-			.antMatchers("/h2-console/**").permitAll()
-			.antMatchers(HttpMethod.GET,"/api/user/","/api/pet/","/api/category/","/api/tag/").permitAll()
-			.antMatchers(HttpMethod.POST,"/api/order/").permitAll()
-		.and().authorizeRequests()
-			.antMatchers(HttpMethod.POST,"/api/user/","/api/pet/","/api/category/","/api/tag/").permitAll()
-			.antMatchers(HttpMethod.PUT,"/api/user/{id}","/api/pet/{id}","/api/category/{id}","/api/tag/{id}").authenticated()
-			.antMatchers(HttpMethod.DELETE,"/api/user/{id}","/api/pet/{id}","/api/category/{id}","/api/tag/{id}").authenticated()
+		http.sessionManagement()
+		.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		.and().cors().and().authorizeRequests()
+		.antMatchers(HttpMethod.POST, "/api/login").permitAll()
+		.antMatchers(HttpMethod.GET, "/api/tag/**", "/api/pet/**", "/api/category/**").permitAll()
+		.anyRequest().authenticated()
 		.and().httpBasic().realmName("Pet Store webapp")
 		.and().csrf().disable();
 	}
 	
 	@Bean
-	CorsConfigurationSource corsConfigurationSource() {
-		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
-		configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", configuration);
-		return source;
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/**")
+					.allowedOrigins("http://localhost:4200")
+					.allowedMethods("GET", "POST", "PUT","DELETE");
+			}
+		};
 	}
 
 }
